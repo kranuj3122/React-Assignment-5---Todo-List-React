@@ -5,7 +5,6 @@ function App() {
   let [inputValue, setInputValue] = useState("");
   let [toDoList, setList] = useState([]);
   let [showList, setShowList] = useState(false);
-  let [updatedValue, setUpdatedValue] = useState("");
   const handleChange = (e) => {
     setInputValue(e.target.value);
   };
@@ -13,7 +12,12 @@ function App() {
     if (inputValue === "") {
       return;
     }
-    const newItem = { id: toDoList.length, value: inputValue, editable: false };
+    const newItem = {
+      id: toDoList.length,
+      value: inputValue,
+      editable: false,
+      updatedValue: inputValue,
+    };
     // copy list
     const copiedList = [...toDoList];
 
@@ -35,31 +39,26 @@ function App() {
   };
   const editItem = (ind) => {
     let copy = [...toDoList];
-    copy = copy.map((item, index) => {
-      if (ind !== index) {
-        return item;
-      }
-      let itemCopy = { ...item, editable: true };
-      setUpdatedValue(item.value);
-      return itemCopy;
-    });
+    copy[ind].editable = true;
     setList(copy);
   };
-  const handleEditChange = (e) => {
-    setUpdatedValue(e.target.value);
+  const handleEditChange = (e, ind) => {
+    let copy = [...toDoList];
+    copy[ind].updatedValue = e.target.value;
+    setList(copy);
   };
-  const update = (ind) => {
-    if (updatedValue === "") {
+  const update = (ind, value) => {
+    if (value === "") {
       return;
     }
-    let updatedItem = { id: ind, value: updatedValue, editable: false };
+    let updatedItem = {
+      id: ind,
+      value: value,
+      editable: false,
+      updatedValue: value,
+    };
     let copy = [...toDoList];
-    copy = copy.map((item, index) => {
-      if (index != ind) {
-        return item;
-      }
-      return updatedItem;
-    });
+    copy[ind] = updatedItem;
     setList(copy);
   };
   return (
@@ -81,13 +80,15 @@ function App() {
                     <>
                       <textarea
                         id="editTask"
-                        value={updatedValue}
-                        onChange={handleEditChange}
+                        value={item.updatedValue}
+                        onChange={(e) => {
+                          handleEditChange(e, index);
+                        }}
                       />
                       <button
                         id="saveTask"
                         onClick={() => {
-                          update(index);
+                          update(index, item.updatedValue);
                         }}
                       >
                         save
@@ -107,7 +108,7 @@ function App() {
                       <button
                         className="delete"
                         onClick={() => {
-                          deleteItem(item.id);
+                          deleteItem(index);
                         }}
                       >
                         delete
