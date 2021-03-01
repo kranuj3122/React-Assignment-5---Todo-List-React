@@ -96,14 +96,14 @@ function App() {
                   {item.editable ? (
                     <>
                       <textarea
-                        id="editTask"
+                        className="editTask"
                         value={item.updatedValue}
                         onChange={(e) => {
                           handleEditChange(e, item.id);
                         }}
                       />
                       <button
-                        id="saveTask"
+                        className="saveTask"
                         onClick={() => {
                           update(item.id, item.updatedValue);
                         }}
