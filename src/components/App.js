@@ -16,7 +16,7 @@ function App() {
       id: toDoList.length + Math.random(),
       value: inputValue,
       editable: false,
-      updatedValue: inputValue,
+      updatedValue: "",
     };
     // copy list
     const copiedList = [...toDoList];
@@ -67,7 +67,7 @@ function App() {
       id: id,
       value: value,
       editable: false,
-      updatedValue: value,
+      updatedValue: "",
     };
     let copy = [...toDoList];
     copy = copy.map((item) => {
